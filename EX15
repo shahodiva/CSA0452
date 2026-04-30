@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <string.h>
+
+struct dir {
+    char fname[10][20];
+    int fcount;
+} d[10];
+
+int main() {
+    int dcount = 0, choice;
+    char dname[20], fname[20];
+
+    while(1) {
+        printf("\n1.Create Dir 2.Create File 3.Display 4.Exit\n");
+        scanf("%d",&choice);
+
+        switch(choice) {
+            case 1:
+                printf("Enter directory name: ");
+                scanf("%s", d[dcount].fname[0]);
+                d[dcount].fcount = 0;
+                dcount++;
+                break;
+
+            case 2:
+                printf("Enter dir index: ");
+                int i; scanf("%d",&i);
+                printf("Enter file name: ");
+                scanf("%s", fname);
+                strcpy(d[i].fname[d[i].fcount++], fname);
+                break;
+
+            case 3:
+                for(int i=0;i<dcount;i++) {
+                    printf("Dir %d:\n", i);
+                    for(int j=0;j<d[i].fcount;j++)
+                        printf("  %s\n", d[i].fname[j]);
+                }
+                break;
+
+            case 4:
+                return 0;
+        }
+    }
+}
