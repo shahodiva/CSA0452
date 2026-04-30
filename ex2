@@ -1,0 +1,36 @@
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+int main() {
+    int src, dest;
+    char buffer[1024];
+    int bytes;
+
+    char source[50], destination[50];
+
+    printf("Enter source file: ");
+    scanf("%s", source);
+
+    printf("Enter destination file: ");
+    scanf("%s", destination);
+
+    src = open(source, O_RDONLY);
+    dest = open(destination, O_WRONLY | O_CREAT, 0644);
+
+    if (src < 0 || dest < 0) {
+        printf("Error opening file\n");
+        return 1;
+    }
+
+    while ((bytes = read(src, buffer, sizeof(buffer))) > 0) {
+        write(dest, buffer, bytes);
+    }
+
+    printf("File copied successfully\n");
+
+    close(src);
+    close(dest);
+
+    return 0;
+}
