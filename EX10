@@ -1,0 +1,28 @@
+#include <stdio.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+#include <string.h>
+
+struct msg {
+    long type;
+    char text[100];
+};
+
+int main() {
+    int msgid;
+    struct msg message;
+
+    msgid = msgget(1234, 0666 | IPC_CREAT);
+
+    if (fork() == 0) {
+        message.type = 1;
+        strcpy(message.text, "Hello from Child");
+        msgsnd(msgid, &message, sizeof(message.text), 0);
+    } else {
+        msgrcv(msgid, &message, sizeof(message.text), 1, 0);
+        printf("Parent received: %s\n", message.text);
+        msgctl(msgid, IPC_RMID, NULL);
+    }
+
+    return 0;
+}
